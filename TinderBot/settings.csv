@@ -1,0 +1,6 @@
+phone:0000000000
+code:+7
+headless:0
+timeout:10.0
+waitTime:3.0
+webdriverPath:"C:/Python36/selenium/webdriver/chrome/chromedriver.exe"
