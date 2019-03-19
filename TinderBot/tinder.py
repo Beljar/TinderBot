@@ -142,8 +142,11 @@ class Tinder:
         self.killStartingDialogs()
 
     def loginVar2(self):
-        self.sendKeys('//*[@id="modal-manager"]/div/div/div[2]/div[2]/div/input',self.phone)
-        self.click('//*[@id="modal-manager"]/div/div/div[2]/button')
+        try:
+            self.sendKeys('//*[@id="modal-manager"]/div/div/div[2]/div[2]/div/input',self.phone)
+            self.click('//*[@id="modal-manager"]/div/div/div[2]/button')
+        except:
+            self.login()
         code = input("enter code from sms:")
         code = strTodigits(code)
         for idx in range(0, len(code)):
