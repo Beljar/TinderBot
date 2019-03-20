@@ -147,6 +147,7 @@ class Tinder:
             self.click('//*[@id="modal-manager"]/div/div/div[2]/button')
         except:
             self.login()
+            return
         code = input("enter code from sms:")
         code = strTodigits(code)
         for idx in range(0, len(code)):
