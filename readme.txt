@@ -11,7 +11,7 @@ or do things manually from cmd:
 python setup.py install
 python setup.py clean
 
-The meaning of installation process is to get all python dependencies. You can get them by means of PIP if you want. Then you do not need to run setup.py
+The purpose of installation process is to get all python dependencies. You can get them manually by means of PIP if you want. Then you do not need to run install.bat.
 
 >>>>> Set up <<<<<<
 
@@ -24,20 +24,20 @@ set your path to chrome webdriver
 
 In TinderBot/SpamScript.csv:
 write your pattern of dialog (or use that is already there)
-New line means wait interlocutor answer.
-Delimiter means do not wait answer, but write next message in separate message-bubble. This is needed in order to avoid large walls texts in one message that may look suspecious to your interlocutor.
+New line = wait interlocutor answer.
+Delimiter ("|") = do not wait answer, but write next message in separate message-bubble. This is needed in order to avoid large walls of texts in one message, cos that may look suspecious to your interlocutor.
 Example of pattern:
 Hi!
 Nice to meet you.|Wanna go out?
 This script will write "Hi" to every mutual liked person, then wait there answer, then write "Nice to meet you." and "Wanna go out?" in separate messages.
 
 ATTENTION!!!
-Do not chenge encoding or extension of settings and pattern-file. Encoding = UTF-8-BOM.!!! Better don't use windows standart pad - it can change encoding without notifying.
+Do not change encoding or extension of settings and pattern-file. Encoding = UTF-8-BOM.!!! Better don't use windows standard pad - it can change encoding without notifying.
 
 >>>>> Run <<<<<<
 
 bot.bat
-or in cmd
+or from cmd:
 python TinderBot\main.py
 
 ATTENTION!
