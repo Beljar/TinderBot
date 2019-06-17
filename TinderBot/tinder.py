@@ -109,7 +109,7 @@ class Tinder:
 
     def login(self):
         print("logining, wait")
-        self.browser.get("https://tinder.com/")
+        self.browser.get("http://tinder.com/")
         time.sleep(self.waitTime*3)
         try:
             enterBtn = self.browser.find_element_by_xpath(
@@ -118,7 +118,7 @@ class Tinder:
             enterBtn.click()
         except:
             pass
-        self.click('//*[@id="modal-manager"]/div/div/div[2]/div/div[3]/div[2]/button')
+        self.click('//*[@id="modal-manager"]/div/div/div[2]/div/div[3]/div[1]/button')
         time.sleep(self.waitTime*3)
         try:
             fr = self.browser.find_elements_by_tag_name("iframe")[1]
@@ -252,6 +252,7 @@ class Tinder:
         links =  self.browser.find_elements_by_class_name("matchListItem")
         counter = 0
         dp = Dprint()
+
         while len(links)>1:
             link = links[1]
             dialog = Dialog()
@@ -262,12 +263,17 @@ class Tinder:
             reply = dialog.getReply(pattern)
             if reply:
                 try:
+                    '''
                     editor = self.browser.find_element_by_xpath(
                         '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/form/textarea'
                         )
+                    '''
+                    editor = self.browser.find_element_by_xpath(
+                        '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[2]/form/textarea'
+                        )                    
                     editor.send_keys(reply)
                     sendBtn = self.browser.find_element_by_xpath(
-                        '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/form/button'
+                        '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[2]/form/button'
                         )
                     sendBtn.click()
                     time.sleep(self.waitTime)
@@ -292,47 +298,70 @@ class Tinder:
         print(f"found {counter} new contacts")
 
     def parseDialogs(self, pattern):
-        toDialogsLink = self.browser.find_element_by_xpath(
+        '''     toDialogsLink = self.browser.find_element_by_xpath(
             '//*[@id="content"]/span/div/div[1]/div/aside/nav/div/div/div/div[1]/div/div[2]'
             )
         toDialogsLink.click()
-        time.sleep(self.waitTime)
+        time.sleep(self.waitTime) '''
         print("Parsing dialogs, press ctrl+c to interrupt")
         dp = Dprint()
         dp.pulse()
-        links = self.browser.find_elements_by_class_name('messageListItem__name')
-        length = len(links)
+
         while True:
-            for i in range(length):
-                try:
-                    links = self.browser.find_elements_by_class_name('messageListItem__name')
-                    link = links[i]
-                    link.click()
-                except:
-                    next
-                time.sleep(self.waitTime)
-                dialog = Dialog()
-                messDivs = self.browser.find_elements_by_class_name('msg')
-                messDivs = list(filter(lambda x:"BreakWord" in x.get_attribute("class"),messDivs))
-                for messDiv in messDivs:
-                    messTxt = messDiv.text
-                    if "C(#fff)" in messDiv.get_attribute("class"):
-                        messDir = Message.OUT
-                    else:
-                        messDir = Message.IN
-                    message = Message(messDir,messTxt)
-                    dialog.addMessage(message)
-                reply = dialog.getReply(pattern)
-                if reply:
-                    for mess in reply:
-                        try:
-                            editor = self.browser.find_element_by_xpath(
-                                '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/form/textarea'
-                                )
-                            editor.send_keys(mess)
-                            sendBtn = self.browser.find_element_by_xpath(
-                                '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/form/button'
-                                )
-                            sendBtn.click()
-                        except:
-                            pass    
+            steps = 30
+            step = 0
+            self.browser.refresh()
+            time.sleep(self.waitTime)
+            toDialogsLink = self.browser.find_element_by_xpath(
+                '//*[@id="content"]/span/div/div[1]/div/aside/nav/div/div/div/div[1]/div/div[2]'
+                )
+            toDialogsLink.click()
+            time.sleep(self.waitTime)
+            links = self.browser.find_elements_by_class_name('messageListItem__name')
+            length = len(links)
+            while step<steps:
+                for i in range(steps):
+                    print((i, length))
+                    try:
+                        links = self.browser.find_elements_by_class_name('messageListItem__name')
+                        link = links[i]
+                        link.click()
+                        step += 1
+                    except:
+                        next
+                    time.sleep(self.waitTime)
+                    dialog = Dialog()
+                    messDivs = self.browser.find_elements_by_class_name('msg')
+                    messDivs = list(filter(lambda x:"BreakWord" in x.get_attribute("class"),messDivs))
+                    for messDiv in messDivs:
+                        messTxt = messDiv.text
+                        if "C(#fff)" in messDiv.get_attribute("class"):
+                            messDir = Message.OUT
+                        else:
+                            messDir = Message.IN
+                        message = Message(messDir,messTxt)
+                        dialog.addMessage(message)
+                    reply = dialog.getReply(pattern)
+                    if reply:
+                        for mess in reply:
+                            try:
+                                '''
+                                editor = self.browser.find_element_by_xpath(
+                                    '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/form/textarea'
+                                    )
+                                '''
+                                editor = self.browser.find_element_by_xpath(
+                                    '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[2]/form/textarea'
+                                    )    
+                                editor.send_keys(mess)
+                                '''
+                                sendBtn = self.browser.find_element_by_xpath(
+                                    '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/form/button'
+                                    )
+                                '''
+                                sendBtn = self.browser.find_element_by_xpath(
+                                    '//*[@id="content"]/span/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[2]/form/button'
+                                    )
+                                sendBtn.click()
+                            except:
+                                pass    
